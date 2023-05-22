@@ -7,7 +7,7 @@ import sqlite3
 con = sqlite3.connect("hydraulic_sensor_data.db")
 cur = con.cursor()
 
-sensor_folder_directory =r'C:\Users\jvanb\.vscode\Nebula\anomoly detection\gas data\data'
+sensor_folder_directory =r'C:\Users\jvanb\.vscode\Nebula\anomoly detection\Anomoly_detection_hydraulic-systems\data'
 # for sensors_file in os.listdir(sensor_folder_directory):
 sensor_types = ['CE', 'CP', 'EPS1', 'FS1', 'PS1', 'PS2', 'PS3', 'PS4', 'PS5', 'PS6','SE', 'TS1', 'TS2', 'TS3', 'TS4', 'VS1']
 def sensor_text_data_to_df(path_to_sensor_data):
