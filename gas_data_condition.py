@@ -20,6 +20,8 @@ def sensor_text_data_to_df(path_to_sensor_data):
 def lengthen_sensor_df(sensor_df, combined_sensor_df,sensor_name):
     long_sensor_df = sensor_df[sensor_name].melt()
     long_sensor_df = long_sensor_df.rename(columns={'variable':'batch_num', 'value':sensor_name})
+    if len(combined_sensor_df)==0:
+        return long_sensor_df
     combined_sensor_df_new = pd.concat([combined_sensor_df, long_sensor_df[sensor_name]], join="inner", axis=1)
     return combined_sensor_df_new
 def evaluate_resample_plot(sensor, sensors_datas,batch_num):
@@ -33,11 +35,13 @@ def evaluate_resample_plot(sensor, sensors_datas,batch_num):
     fig.update_xaxes(visible=False)
     return fig
 sensors_datas={}
+new_df = ''
 for sensor_type in sensor_types:
     sensor_df = sensor_text_data_to_df(sensor_folder_directory +'\\'+sensor_type+'.txt')
     sensors_datas[sensor_type] = sensor_df
-    #TO DO implement the lengthen_sensor_df to get the desired shape of data, add this data to sqllite db
-    # sensor_df.to_sql(name=sensor_type+'_sensor_values',con=con,if_exists='replace')
+    new_df = lengthen_sensor_df(sensors_datas,new_df, sensor_type)
+
+new_df.to_sql(name='sensor_batch_data',con=con,if_exists='replace')
 
 
 PS1_resample_eval_fig = evaluate_resample_plot('PS1', sensors_datas,1491)
